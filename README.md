@@ -167,7 +167,6 @@ manufacturing-downtime-analysis/
 │   └── data/
 │       └── random_forest_permutation_importance.csv
 │
-├── src/
 ├── requirements.txt
 ├── requirements-dev.txt
 ├── README.md

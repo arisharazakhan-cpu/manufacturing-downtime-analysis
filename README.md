@@ -1,54 +1,101 @@
-
 # Manufacturing Downtime Analysis
 
 ## Project overview
 
-**Goal:**
-Analyze manufacturing sensor and operational data to identify key drivers of machine downtime and build a model that estimates failure risk under real-world operating conditions.
+This project analyzes manufacturing sensor and operational data to identify the primary drivers of machine downtime and to build a predictive model that estimates failure risk under real-world operating conditions.
 
-**Data:**
-Predictive maintenance–style dataset containing machine operating parameters, sensor measurements, and labeled failure events.
+The analysis is framed as a predictive maintenance problem, where failure events are rare but costly. The focus is therefore on ranking and early detection rather than raw classification accuracy.
 
-**Outcome:**
-An end-to-end analysis including exploratory data visualization, multiple predictive models, threshold tuning for failure detection, and actionable insights to support preventive maintenance decisions.
+The final output is an interpretable, end-to-end modeling pipeline that supports data-driven preventive maintenance decisions.
 
 ---
 
-## Getting started
+## Business context and motivation
 
-Python 3.11 recommended.
+Unplanned machine downtime is expensive, disruptive, and difficult to predict. In manufacturing environments, missing an impending failure is often far more costly than triggering a false alarm.
 
-1. Create and activate a virtual environment
-   `python -m venv .venv`
-   `source .venv/bin/activate`
+This project mirrors a real operational setting by:
+• Working with severely imbalanced failure data
+• Prioritizing recall over accuracy
+• Explicitly tuning decision thresholds
+• Emphasizing interpretability and actionability
 
-2. Install dependencies
-   `pip install -r requirements.txt`
+The goal is not just prediction, but insight into *why* failures occur and *which signals* should be monitored in practice.
 
-3. Launch notebooks
-   `jupyter nbclassic`
-   or
-   `jupyter notebook`
+---
+
+## Data description
+
+The dataset follows a predictive maintenance structure and includes:
+• Machine operating parameters
+• Sensor measurements collected during operation
+• Accumulated wear indicators
+• Labeled failure events
+
+The data includes both static attributes and dynamic operational signals, allowing comparison of their relative predictive importance.
+
+---
+
+## Quick start and reproducibility
+
+Python 3.11 is recommended.
+
+Clone the repository and navigate to the project root.
+
+Create and activate a virtual environment
+`python -m venv .venv`
+`source .venv/bin/activate`
+
+Install dependencies
+`pip install -r requirements.txt`
+
+Launch notebooks
+`jupyter nbclassic`
+or
+`jupyter notebook`
+
+All analysis can be reproduced by running the notebooks in numerical order.
 
 ---
 
 ## Exploratory analysis
 
-Initial analysis focuses on understanding data quality, feature distributions, and relationships between operating conditions and machine failures. Visualizations highlight how operational stress indicators such as tool wear, torque, rotational speed, and temperature differences differ between failure and non-failure cases.
+Exploratory analysis focuses on data quality, feature distributions, and relationships between operating conditions and failure events.
 
-This step establishes domain intuition and informs feature engineering decisions used in downstream modeling.
+Visual comparisons between failure and non-failure cases show clear separation in operational stress indicators such as rotational speed, torque, temperature differential, and tool wear. These observations inform feature selection and motivate the modeling strategy used downstream.
 
 ---
 
-## Modeling and insights
+## Modeling approach
 
-This project builds a predictive maintenance pipeline to estimate machine failure risk under severe class imbalance. Multiple models were evaluated, including logistic regression and a random forest, with performance assessed using ROC AUC and average precision rather than accuracy alone.
+The failure prediction task exhibits extreme class imbalance, making accuracy an inappropriate primary metric.
 
-Decision thresholds were explicitly tuned to prioritize recall, reflecting real manufacturing tradeoffs where missed failures are significantly more costly than false alarms. The tuned random forest demonstrates strong ranking performance while maintaining high recall for failure events, making it suitable for early-warning use cases in preventive maintenance.
+Two models were evaluated:
+• Logistic regression as a baseline
+• Random forest for nonlinear modeling and feature interaction capture
 
-Permutation feature importance reveals that failure risk is driven primarily by operational stress signals such as rotational speed, torque, temperature differential, and accumulated tool wear. Static product attributes contribute minimally once operating conditions are accounted for, indicating that how a machine is used matters more than which product type it belongs to.
+Model performance was assessed using ROC AUC and average precision. Decision thresholds were tuned to prioritize recall, reflecting manufacturing environments where missed failures are significantly more costly than false positives.
 
-A summary of the top predictive signals is exported to `outputs/random_forest_permutation_importance.csv` for downstream analysis and reporting. The full modeling workflow, including threshold tuning and explainability analysis, is documented in the model comparison notebook.
+The tuned random forest demonstrates strong ranking performance while maintaining high recall, making it suitable for early-warning preventive maintenance use cases.
+
+---
+
+## Feature importance and explainability
+
+Permutation feature importance was used to evaluate which variables most strongly influence model performance.
+
+The results show that failure risk is driven primarily by operational stress signals, including:
+• Rotational speed
+• Torque
+• Temperature differential
+• Accumulated tool wear
+
+Static product attributes contribute minimally once operating conditions are accounted for. This indicates that *how* a machine is used matters more than *which product* it is producing.
+
+![Random Forest Permutation Importance](reports/figures/rf_permutation_importance.png)
+
+A ranked summary of these features is exported to:
+`reports/data/random_forest_permutation_importance.csv`
 
 ---
 
@@ -67,8 +114,8 @@ A summary of the top predictive signals is exported to `outputs/random_forest_pe
 manufacturing-downtime-analysis/
 │
 ├── data/
-│   ├── raw/                
-│   └── processed/          
+│   ├── raw/
+│   └── processed/
 │
 ├── notebooks/
 │   ├── 01_data_overview_quality_check.ipynb
@@ -76,10 +123,15 @@ manufacturing-downtime-analysis/
 │   └── 03_model_comparison_threshold_tuning.ipynb
 │
 ├── outputs/
-│   ├── random_forest_permutation_importance.csv
-│   └── model_metrics_summary.csv
+│   └── legacy_intermediate_files/
 │
-├── src/                    
+├── reports/
+│   ├── figures/
+│   │   └── rf_permutation_importance.png
+│   └── data/
+│       └── random_forest_permutation_importance.csv
+│
+├── src/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -89,14 +141,13 @@ manufacturing-downtime-analysis/
 
 ## Key takeaways
 
-* Machine failure risk is driven primarily by **operational stress**, not static product attributes.
-* **Threshold tuning** is critical in imbalanced failure prediction where recall is prioritized.
-* Explainable models help translate predictive signals into **actionable maintenance decisions**.
-* Monitoring real-time operating conditions can reduce unplanned downtime while managing inspection costs.
+Machine failure risk is driven primarily by operational stress rather than static product attributes.
+Threshold tuning is essential when failure events are rare and recall is prioritized.
+Explainable modeling techniques enable translation of predictions into actionable maintenance strategies.
+Monitoring real-time operating conditions enables earlier intervention and reduced unplanned downtime.
 
 ---
 
 ## Data source
 
 This project uses the AI4I 2020 Predictive Maintenance dataset. Dataset provenance and licensing information are available through the original publication and hosting source.
-

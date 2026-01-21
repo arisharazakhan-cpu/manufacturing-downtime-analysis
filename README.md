@@ -197,4 +197,8 @@ manufacturing-downtime-analysis/
 
 ## Data source
 
-This project uses the **AI4I 2020 Predictive Maintenance** dataset. Dataset provenance and licensing information are available through the original publication and hosting source.
+This project uses the **AI4I 2020 Predictive Maintenance Dataset**, a publicly available dataset released for research and educational use.
+
+Source: https://archive.ics.uci.edu/ml/datasets/AI4I+2020+Predictive+Maintenance+Dataset
+
+The dataset is used solely for non-commercial, educational, and portfolio purposes. No proprietary or sensitive data is included.

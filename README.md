@@ -111,10 +111,16 @@ All results in this repository can be reproduced by running the notebooks in num
    source .venv/bin/activate
    ```
 
-2. Install dependencies:
+2. Install dependencies (core runtime):
 
    ```bash
    pip install -r requirements.txt
+   ```
+
+   For the full notebook and development environment:
+
+   ```bash
+   pip install -r requirements-dev.txt
    ```
 
 3. Launch notebooks:
@@ -163,6 +169,7 @@ manufacturing-downtime-analysis/
 │
 ├── src/
 ├── requirements.txt
+├── requirements-dev.txt
 ├── README.md
 └── .gitignore
 ```
@@ -199,6 +206,6 @@ manufacturing-downtime-analysis/
 
 This project uses the **AI4I 2020 Predictive Maintenance Dataset**, a publicly available dataset released for research and educational use.
 
-Source: https://archive.ics.uci.edu/ml/datasets/AI4I+2020+Predictive+Maintenance+Dataset
+Source: [https://archive.ics.uci.edu/ml/datasets/AI4I+2020+Predictive+Maintenance+Dataset](https://archive.ics.uci.edu/ml/datasets/AI4I+2020+Predictive+Maintenance+Dataset)
 
 The dataset is used solely for non-commercial, educational, and portfolio purposes. No proprietary or sensitive data is included.

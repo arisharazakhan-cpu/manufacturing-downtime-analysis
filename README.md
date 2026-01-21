@@ -67,8 +67,8 @@ A summary of the top predictive signals is exported to `outputs/random_forest_pe
 manufacturing-downtime-analysis/
 │
 ├── data/
-│   ├── raw/                # Original dataset
-│   └── processed/          # Generated features (if applicable)
+│   ├── raw/                
+│   └── processed/          
 │
 ├── notebooks/
 │   ├── 01_data_overview_quality_check.ipynb
@@ -79,7 +79,7 @@ manufacturing-downtime-analysis/
 │   ├── random_forest_permutation_importance.csv
 │   └── model_metrics_summary.csv
 │
-├── src/                    # Reusable code (optional extension)
+├── src/                    
 ├── requirements.txt
 ├── README.md
 └── .gitignore

@@ -14,25 +14,27 @@ The final output is an interpretable, end-to-end modeling pipeline that supports
 
 Unplanned machine downtime is expensive, disruptive, and difficult to predict. In manufacturing environments, missing an impending failure is often far more costly than triggering a false alarm.
 
-This project mirrors a real operational setting by:
-• Working with severely imbalanced failure data
-• Prioritizing recall over accuracy
-• Explicitly tuning decision thresholds
-• Emphasizing interpretability and actionability
+This project mirrors real operational constraints by explicitly addressing the following challenges:
 
-The goal is not just prediction, but insight into *why* failures occur and *which signals* should be monitored in practice.
+* Severely imbalanced failure data
+* The need to prioritize recall over accuracy
+* Explicit decision-threshold tuning
+* The importance of model interpretability and actionability
+
+The goal is not just prediction, but insight into why failures occur and which signals should be monitored in practice.
 
 ---
 
 ## Data description
 
 The dataset follows a predictive maintenance structure and includes:
-• Machine operating parameters
-• Sensor measurements collected during operation
-• Accumulated wear indicators
-• Labeled failure events
 
-The data includes both static attributes and dynamic operational signals, allowing comparison of their relative predictive importance.
+* Machine operating parameters
+* Sensor measurements collected during operation
+* Accumulated wear indicators
+* Labeled failure events
+
+The data contains both static attributes and dynamic operational signals, enabling comparison of their relative predictive importance.
 
 ---
 
@@ -40,19 +42,32 @@ The data includes both static attributes and dynamic operational signals, allowi
 
 Python 3.11 is recommended.
 
-Clone the repository and navigate to the project root.
+Follow the steps below to reproduce the analysis.
 
-Create and activate a virtual environment
-`python -m venv .venv`
-`source .venv/bin/activate`
+1. Create and activate a virtual environment
 
-Install dependencies
-`pip install -r requirements.txt`
+   ```
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
 
-Launch notebooks
-`jupyter nbclassic`
-or
-`jupyter notebook`
+2. Install dependencies
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Launch notebooks
+
+   ```
+   jupyter nbclassic
+   ```
+
+   or
+
+   ```
+   jupyter notebook
+   ```
 
 All analysis can be reproduced by running the notebooks in numerical order.
 
@@ -62,7 +77,7 @@ All analysis can be reproduced by running the notebooks in numerical order.
 
 Exploratory analysis focuses on data quality, feature distributions, and relationships between operating conditions and failure events.
 
-Visual comparisons between failure and non-failure cases show clear separation in operational stress indicators such as rotational speed, torque, temperature differential, and tool wear. These observations inform feature selection and motivate the modeling strategy used downstream.
+Visual comparisons between failure and non-failure cases reveal clear separation in operational stress indicators such as rotational speed, torque, temperature differential, and tool wear. These patterns inform feature selection and motivate the modeling strategy used downstream.
 
 ---
 
@@ -71,10 +86,11 @@ Visual comparisons between failure and non-failure cases show clear separation i
 The failure prediction task exhibits extreme class imbalance, making accuracy an inappropriate primary metric.
 
 Two models were evaluated:
-• Logistic regression as a baseline
-• Random forest for nonlinear modeling and feature interaction capture
 
-Model performance was assessed using ROC AUC and average precision. Decision thresholds were tuned to prioritize recall, reflecting manufacturing environments where missed failures are significantly more costly than false positives.
+* Logistic regression as a baseline model
+* Random forest to capture nonlinear relationships and feature interactions
+
+Model performance was assessed using ROC AUC and average precision. Decision thresholds were explicitly tuned to prioritize recall, reflecting manufacturing environments where missed failures are significantly more costly than false positives.
 
 The tuned random forest demonstrates strong ranking performance while maintaining high recall, making it suitable for early-warning preventive maintenance use cases.
 
@@ -84,17 +100,18 @@ The tuned random forest demonstrates strong ranking performance while maintainin
 
 Permutation feature importance was used to evaluate which variables most strongly influence model performance.
 
-The results show that failure risk is driven primarily by operational stress signals, including:
-• Rotational speed
-• Torque
-• Temperature differential
-• Accumulated tool wear
+The analysis shows that failure risk is driven primarily by operational stress signals, including:
 
-Static product attributes contribute minimally once operating conditions are accounted for. This indicates that *how* a machine is used matters more than *which product* it is producing.
+* Rotational speed
+* Torque
+* Temperature differential
+* Accumulated tool wear
+
+Static product attributes contribute minimally once operating conditions are accounted for. This indicates that how a machine is used matters more than which product it is producing.
 
 ![Random Forest Permutation Importance](reports/figures/rf_permutation_importance.png)
 
-A ranked summary of these features is exported to:
+A ranked summary of feature importances is exported to:
 `reports/data/random_forest_permutation_importance.csv`
 
 ---
@@ -141,10 +158,33 @@ manufacturing-downtime-analysis/
 
 ## Key takeaways
 
-Machine failure risk is driven primarily by operational stress rather than static product attributes.
-Threshold tuning is essential when failure events are rare and recall is prioritized.
-Explainable modeling techniques enable translation of predictions into actionable maintenance strategies.
-Monitoring real-time operating conditions enables earlier intervention and reduced unplanned downtime.
+* Machine failure risk is driven primarily by operational stress rather than static product attributes.
+* Threshold tuning is essential when failure events are rare and recall is prioritized.
+* Explainable modeling techniques help translate predictions into actionable maintenance strategies.
+* Monitoring real-time operating conditions enables earlier intervention and reduced unplanned downtime.
+
+---
+
+## Model limitations
+
+While the model demonstrates strong ranking performance and recall, several limitations should be noted.
+
+The analysis is based on historical, offline data and assumes future operating conditions resemble those observed during training. Performance may degrade if machines operate under new regimes not represented in the dataset.
+
+The model optimizes statistical metrics rather than explicit cost functions. In practice, optimal thresholds may vary based on maintenance capacity, inspection costs, and production constraints.
+
+Permutation feature importance highlights associations with model performance, not causal relationships. High-importance features should be interpreted as signals correlated with failure risk rather than direct causes.
+
+---
+
+## Future work
+
+Several extensions could improve real-world applicability and robustness.
+
+* Incorporate cost-sensitive learning or explicit cost curves to align predictions with operational tradeoffs.
+* Evaluate model performance in streaming or near-real-time settings using live sensor data.
+* Explore temporal modeling approaches to capture degradation patterns leading up to failure events.
+* Integrate predictions into a broader maintenance decision framework that accounts for scheduling and resource constraints.
 
 ---
 

@@ -90,6 +90,16 @@ A ranked summary of feature importances is exported to:
 
 ---
 
+## Skills demonstrated
+
+* Imbalanced classification and recall-focused modeling
+* Threshold tuning using precision–recall tradeoffs
+* Model evaluation with ROC AUC and average precision
+* Operational interpretability via feature importance
+* Translating model outputs into actionable business decisions
+
+---
+
 ## Tech stack
 
 * Python 3.11
